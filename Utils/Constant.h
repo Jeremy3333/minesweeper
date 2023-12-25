@@ -7,5 +7,7 @@
 
 #define CASE_HEIGHT 16
 #define ZOOM 3
+#define GRID_X 10
+#define GRID_Y 59
 
 #endif //CONSTANT_H

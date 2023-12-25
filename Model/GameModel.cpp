@@ -7,23 +7,18 @@
 #include <iostream>
 
 namespace Model {
-    GameModel::GameModel() : running(true), lost(false), grid_(beginner){}
-
-    bool GameModel::isGameRunning() const{
-        return running;
-    }
-
-    void GameModel::closeGame() {
-        running = false;
-    }
+    GameModel::GameModel(Controller::GameController* controller) : controller_(controller), lost(false), grid_(beginner){}
 
     Grid *GameModel::getGrid() {
         return &grid_;
     }
 
-    void GameModel::selectCase(int x, int y) {
-        grid_.selectCase(x, y);
+    void GameModel::getGridDim(int& x, int& y) const
+    {
+        x = grid_.getWidth();
+        y = grid_.getHeight();
     }
+
 
     void GameModel::reveleCell(const int x, const int y) {
         if(grid_.revele(x, y)) {

@@ -21,9 +21,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     // Create instances of the Model, View, and Controller
-    Model::GameModel gameModel;
-    View::GameView gameView;
-    Controller::GameController gameController(&gameModel, &gameView);
+    Controller::GameController gameController;
 
     gameController.LaunchGameLoop();
 

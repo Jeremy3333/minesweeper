@@ -15,22 +15,31 @@ class GameController {
 public:
     /**
      * \brief Create a GameController Object
-     * \param p_model A pointer to the minesweeper model
-     * \param p_view A point to the minesweeper view
      */
-    GameController(Model::GameModel *p_model, View::GameView *p_view);
+    GameController();
 
     /**
      * \brief Lauche the game loop that end when the game end.
      */
     void LaunchGameLoop();
+    void closeGame();
+
+    void getGridDim(int &x, int &y) const;
+
+    void getSelect(int &x, int &y) const;
+
+    void mouseLeftDown(int mouseX, int mouseY);
+    void mouseLeftHoldDown(int mouseX, int mouseY);
+    void mouseLeftUp(int mouseX, int mouseY);
+
+    static void ScreenGridToGrid(int &x, int &y);
+    static void GridToScreenGrid(int &x, int &y);
 private:
-    Model::GameModel *model;
-    View::GameView *view;
-    bool mouseLeft;
-    [[nodiscard]] bool isGameRunning() const;
-    void handleInput();
-    static void ScreenToGrif(int &x, int &y) ;
+    Model::GameModel model;
+    View::GameView view;
+    bool running;
+    int selX, selY;
+    void selectCell(int x, int y);
 };
 
 } // Controller

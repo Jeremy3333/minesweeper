@@ -1,4 +1,23 @@
-"C:\Users\jerem\AppData\Local\Programs\CLion Nova\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Users/jerem/AppData/Local/Programs/CLion Nova/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\jerem\code\minesweeper -B C:\Users\jerem\code\minesweeper\cmake-build-debug
--- Configuring done (0.1s)
+/home/tally/.local/share/JetBrains/Toolbox/apps/clion-nova/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/tally/CLionProjects/minesweeper -B /home/tally/CLionProjects/minesweeper/cmake-build-debug
+CMake Deprecation Warning:
+  Support for "Extra Generators" like
+
+    CodeBlocks
+
+  is deprecated and will be removed from a future version of CMake.  IDEs may
+  use the cmake-file-api(7) to view CMake-generated project build trees.
+
+
+CMake Warning (dev) at /home/tally/.local/share/JetBrains/Toolbox/apps/clion-nova/bin/cmake/linux/x64/share/cmake-3.27/Modules/FindPackageHandleStandardArgs.cmake:438 (message):
+  The package name passed to `find_package_handle_standard_args` (SDL2_IMAGE)
+  does not match the name of the calling package (SDL2_image).  This can lead
+  to problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  cmake_modules/FindSDL2_image.cmake:159 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+  CMakeLists.txt:15 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Configuring done (0.0s)
 -- Generating done (0.0s)
--- Build files have been written to: C:/Users/jerem/code/minesweeper/cmake-build-debug
+-- Build files have been written to: /home/tally/CLionProjects/minesweeper/cmake-build-debug

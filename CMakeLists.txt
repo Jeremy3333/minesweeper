@@ -5,11 +5,14 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules)
 
-set(SDL2_PATH "C:/SDL2-w64")
+set(SDL2_PATH
+        "C:/SDL2-w64"
+        /usr/include/
+)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2TTF REQUIRED)
-find_package(SDL2_IMAGE REQUIRED)
+find_package(SDL2_image REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
 add_executable(minesweeper main.cpp

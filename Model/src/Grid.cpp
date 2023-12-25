@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-Grid::Grid(const Difficulty difficulty) :selX_(-1), selY_(-1), isInit_(false){
+Grid::Grid(const Difficulty difficulty) : isInit_(false){
     switch (difficulty) {
         case beginner:
             numMine_ = 10;
@@ -60,23 +60,6 @@ int Grid::getHeight() const {
 
 Cell Grid::getCell(const int x, const int y) const{
     return cells_[x][y];
-}
-
-void Grid::getSelect(int& x, int& y) const {
-    x = selX_;
-    y = selY_;
-}
-
-void Grid::selectCase(const int x, const int y) {
-    if(x >= 0 && y >= 0 && x < width_ && y < height_) {
-        if(!cells_[x][y].isReveled() && !cells_[x][y].isMarked()) {
-            selX_ = x;
-            selY_ = y;
-            return;
-        }
-    }
-    selX_ = -1;
-    selY_ = -1;
 }
 
 bool Grid::revele(const int x, const int y) {

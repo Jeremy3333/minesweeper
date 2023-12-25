@@ -11,71 +11,122 @@
 
 namespace Controller {
 
-    GameController::GameController(Model::GameModel *p_model,View::GameView *p_view) : model(p_model), view(p_view), mouseLeft(false) {}
+    GameController::GameController() : model(this), view(this), running(true), selX(-1), selY(-1) {}
 
-    bool GameController::isGameRunning() const {
-        return model->isGameRunning();
+    void GameController::getGridDim(int& x, int& y) const
+    {
+        model.getGridDim(x, y);
+        GridToScreenGrid(x, y);
     }
+
+    void GameController::getSelect(int& x, int& y) const
+    {
+        x = selX;
+        y = selY;
+    }
+
+
+    void GameController::closeGame()
+    {
+        running = false;
+    }
+
 
     void GameController::LaunchGameLoop(){
 
         // Main game loop
-        while (isGameRunning()) {
+        while (running) {
             // Update user input and game state
-            handleInput();
+            view.receiveInput();
 
             // Update the view based on the model
-            view->render(model);
+            view.render(&model);
         }
     }
 
+    void GameController::mouseLeftDown(const int mouseX, const int mouseY)
+    {
+        // if it's on the grid
+        constexpr int gridX = GRID_X * ZOOM;
+        constexpr int gridY = GRID_Y * ZOOM;
+        int gridW, gridH;
+        model.getGridDim(gridW, gridH);
+        GridToScreenGrid(gridW, gridH);
+        if(mouseX >= gridX && mouseY >= gridY && mouseX < gridX + gridW && mouseY < gridY + gridH)
+        {
+            int x = mouseX - gridX;
+            int y = mouseY - gridY;
+            ScreenGridToGrid(x, y);
+            selectCell(x, y);
+            return;
+        }
+        selX = -1;
+        selY = -1;
+    }
 
-    void GameController::handleInput() {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if(event.type == SDL_QUIT){
-                model->closeGame();
-            }
-            else if (event.type == SDL_KEYDOWN) {
-                switch(event.key.keysym.sym) {
-                    case SDLK_ESCAPE:
-                        model->closeGame();
-                    break;
-                    default:
-                        break;
-                }
-            }
-            else if (event.type == SDL_MOUSEBUTTONDOWN) {
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    int mouseX = event.button.x;
-                    int mouseY = event.button.y;
-                    ScreenToGrif(mouseX, mouseY);
-                    model->selectCase(mouseX, mouseY);
-                    mouseLeft = true;
-                }
-            }
-            else if (event.type == SDL_MOUSEBUTTONUP) {
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    int mouseX = event.button.x;
-                    int mouseY = event.button.y;
-                    ScreenToGrif(mouseX, mouseY);
-                    model->selectCase(-1, -1);
-                    model->reveleCell(mouseX, mouseY);
-                    mouseLeft = false;
-                }
-            }
-            else if (event.type == SDL_MOUSEMOTION && mouseLeft) {
-                int mouseX = event.button.x;
-                int mouseY = event.button.y;
-                ScreenToGrif(mouseX, mouseY);
-                model->selectCase(mouseX, mouseY);
-            }
+    void GameController::mouseLeftHoldDown(const int mouseX, const int mouseY)
+    {
+        // if it's on the grid
+        constexpr int gridX = GRID_X * ZOOM;
+        constexpr int gridY = GRID_Y * ZOOM;
+        int gridW, gridH;
+        model.getGridDim(gridW, gridH);
+        GridToScreenGrid(gridW, gridH);
+        if(mouseX >= gridX && mouseY >= gridY && mouseX < gridX + gridW && mouseY < gridY + gridH)
+        {
+            int x = mouseX - gridX;
+            int y = mouseY - gridY;
+            ScreenGridToGrid(x, y);
+            selectCell(x, y);
+            return;
+        }
+        selX = -1;
+        selY = -1;
+    }
+
+    void GameController::mouseLeftUp(const int mouseX, const int mouseY)
+    {
+        selX = -1;
+        selY = -1;
+
+        // if it's on the grid
+        constexpr int gridX = GRID_X * ZOOM;
+        constexpr int gridY = GRID_Y * ZOOM;
+        int gridW, gridH;
+        model.getGridDim(gridW, gridH);
+        GridToScreenGrid(gridW, gridH);
+        if(mouseX >= gridX && mouseY >= gridY && mouseX < gridX + gridW && mouseY < gridY + gridH)
+        {
+            int x = mouseX - gridX;
+            int y = mouseY - gridY;
+            ScreenGridToGrid(x, y);
+            model.reveleCell(x, y);
         }
     }
 
-    void GameController::ScreenToGrif(int& x, int& y) {
-        x = (x - (10 * ZOOM)) / (CASE_HEIGHT * ZOOM);
-        y = (y - (59 * ZOOM)) / (CASE_HEIGHT * ZOOM);
+    void GameController::selectCell(int x, int y)
+    {
+        if(model.getGrid()->getCell(x, y).isMarked() || model.getGrid()->getCell(x, y).isReveled())
+        {
+            selX = -1;
+            selY = -1;
+            return;
+        }
+        selX = x;
+        selY = y;
     }
+
+
+    void GameController::ScreenGridToGrid(int& x, int& y) {
+        x /= CASE_HEIGHT * ZOOM;
+        y /= CASE_HEIGHT * ZOOM;
+    }
+
+    void GameController::GridToScreenGrid(int& x, int& y)
+    {
+        x *= CASE_HEIGHT * ZOOM;
+        y *= CASE_HEIGHT * ZOOM;
+    }
+
 
 } // Controller

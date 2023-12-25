@@ -4,11 +4,12 @@
 
 #include "GameView.h"
 #include "../Utils/Constant.h"
+#include "../Controller/GameController.h"
 
 #include <iostream>
 
 namespace View {
-    GameView::GameView() {
+    GameView::GameView(Controller::GameController *controller) : controller_(controller), mouseLeft(false){
         window_ = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
         if(!window_) {
             std::cerr << "SDL window creation error: " << SDL_GetError() << std::endl;
@@ -45,6 +46,47 @@ namespace View {
         SDL_DestroyWindow(window_);
     }
 
+    void GameView::receiveInput() {
+        int gridX, gridY;
+        controller_->getGridDim(gridX, gridY);
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if(event.type == SDL_QUIT){
+                controller_->closeGame();
+            }
+            else if (event.type == SDL_KEYDOWN) {
+                switch(event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    controller_->closeGame();
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    const int mouseX = event.button.x;
+                    const int mouseY = event.button.y;
+                    controller_->mouseLeftDown(mouseX, mouseY);
+                    mouseLeft = true;
+                }
+            }
+            else if (event.type == SDL_MOUSEBUTTONUP) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    const int mouseX = event.button.x;
+                    const int mouseY = event.button.y;
+                    controller_->mouseLeftUp(mouseX, mouseY);
+                    mouseLeft = false;
+                }
+            }
+            else if (event.type == SDL_MOUSEMOTION && mouseLeft) {
+                const int mouseX = event.button.x;
+                const int mouseY = event.button.y;
+                controller_->mouseLeftHoldDown(mouseX, mouseY);
+            }
+        }
+    }
+
     void GameView::render(Model::GameModel *model) const{
         const int WINW = ((CASE_HEIGHT * (model->getGrid()->getWidth())) + 20) * ZOOM;
         const int WINH = (((CASE_HEIGHT * (model->getGrid()->getWidth())) + 20) + 49) * ZOOM;
@@ -58,8 +100,20 @@ namespace View {
         SDL_SetRenderDrawColor(renderer_,181, 181, 181, 255);
         SDL_RenderClear(renderer_);
         drawBump(0, 0, width, height, true);
-        drawBump(8 * ZOOM, 57 * ZOOM, width - 16 * ZOOM, height - 16 * ZOOM, false);
         drawBump(8 * ZOOM, 8 * ZOOM, width - 16 * ZOOM, 41 * ZOOM, false);
+    }
+
+    void GameView::drawGrid(const Grid& grid) const{
+        drawBump((GRID_X - 2) * ZOOM, (GRID_Y - 2) * ZOOM, ((grid.getWidth() * CASE_HEIGHT + 4) * ZOOM), ((grid.getHeight() * CASE_HEIGHT + 4) * ZOOM), false);
+        SDL_SetRenderDrawColor(renderer_,0, 0, 0, 255);
+        for(int i = 0; i < grid.getWidth(); i++) {
+            for(int j = 0; j < grid.getHeight(); j++) {
+                drawCase(i,j, grid.getCell(i, j));
+            }
+        }
+        int x, y;
+        controller_->getSelect(x, y);
+        drawSelect(x, y);
     }
 
     void GameView::drawBump(const int x, const int y, const int w, const int h, const bool up) const{
@@ -93,27 +147,14 @@ namespace View {
         SDL_RenderFillRect(renderer_, &rect);
     }
 
-
-    void GameView::drawGrid(const Grid& grid) const{
-        SDL_SetRenderDrawColor(renderer_,0, 0, 0, 255);
-        for(int i = 0; i < grid.getWidth(); i++) {
-            for(int j = 0; j < grid.getHeight(); j++) {
-                drawCase(i,j, grid.getCell(i, j));
-            }
-        }
-        int x, y;
-        grid.getSelect(x, y);
-        drawSelect(x, y);
-    }
-
     void GameView::drawCase(const int x, const int y, const Cell cell) const{
-        drawTexture((x * CASE_HEIGHT + 10) * ZOOM, (y * CASE_HEIGHT + 59) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, cell.getCaseID() * 17, 51 + (static_cast<int>(cell.isCaseNumbre()) * 17), 16, 16, sprite_, false);
+        drawTexture((x * CASE_HEIGHT + GRID_X) * ZOOM, (y * CASE_HEIGHT + GRID_Y) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, cell.getCaseID() * 17, 51 + (static_cast<int>(cell.isCaseNumbre()) * 17), 16, 16, sprite_, false);
     }
 
     void GameView::drawSelect(const int x, const int y) const {
         if(x == -1)
             return;
-        drawTexture((x * CASE_HEIGHT + 10) * ZOOM, (y * CASE_HEIGHT + 59) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, 17, 51, 16, 16, sprite_, false);
+        drawTexture((x * CASE_HEIGHT + GRID_X) * ZOOM, (y * CASE_HEIGHT + GRID_Y) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, 17, 51, 16, 16, sprite_, false);
     }
 
 
@@ -151,7 +192,6 @@ namespace View {
             exit(1);
         }
     }
-
 
 
 } // View

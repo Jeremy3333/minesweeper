@@ -11,6 +11,11 @@
 #include <SDL_image.h>
 
 
+namespace Controller
+{
+    class GameController;
+}
+
 namespace View {
 
 class GameView {
@@ -18,12 +23,14 @@ public:
     /**
      * \brief Create a GameView object
      */
-    GameView();
+    explicit GameView(Controller::GameController *controller);
 
     /**
      * \brief Destruct the object
      */
     ~GameView();
+
+    void receiveInput();
 
     /**
      * \brief Render a fram of the game
@@ -33,6 +40,8 @@ public:
 private:
     SDL_Window* window_;
     SDL_Renderer* renderer_;
+    Controller::GameController *controller_;
+    bool mouseLeft;
     TTF_Font* font_;
     SDL_Texture *sprite_;
     void drawBackground(int width, int height) const;

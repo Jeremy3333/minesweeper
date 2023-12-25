@@ -32,10 +32,6 @@ public:
 
     [[nodiscard]] Cell getCell(int x, int y) const;
 
-    void getSelect(int &x, int &y) const;
-
-    void selectCase(int x, int y);
-
     bool revele(int x, int y);
 
     void reveleMine() const;
@@ -48,11 +44,10 @@ private:
     int mineLeft_;
     int width_;
     int height_;
-    int selX_, selY_;
     Cell **cells_;
     bool isInit_;
     void init(int x, int y);
-    int bombAround(int x, int y) const;
+    [[nodiscard]] int bombAround(int x, int y) const;
 };
 
 
