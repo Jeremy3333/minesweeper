@@ -26,6 +26,10 @@ public:
     [[nodiscard]] Grid *getGrid();
 
     void getGridDim(int &x, int &y) const;
+    [[nodiscard]] int getCellIndex(int x, int y) const;
+    [[nodiscard]] bool isReveled(int x, int y) const;
+    [[nodiscard]] bool isMarked(int x, int y) const;
+
 
     void reveleCell(int x, int y);
 

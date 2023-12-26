@@ -35,34 +35,6 @@ void Cell::mark() {
     marked_ = true;
 }
 
-
-bool Cell::isCaseNumbre() const {
-    return (reveled_ && !marked_ &&(index_ > 0));
-}
-
-int Cell::getCaseID() const {
-    if(isCaseNumbre())
-        return index_ - 1;
-
-    if(reveled_) {
-        if(index_ == -2)
-            return ExplodedMine;
-        if(!marked_) {
-            if(index_ == 0)
-                return noMineAround;
-            return Mine;
-        }
-        if(index_ != -1)
-            return MarkedNoMine;
-        std::cerr << "Error Impossible case" << std::endl;
-        exit(1);
-    }
-    if(marked_)
-        return Marked;
-    return Uncheck;
-
-}
-
 bool Cell::isReveled() const {
     return reveled_;
 }

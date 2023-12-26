@@ -7,8 +7,6 @@
 #include "../Model/GameModel.h"
 #include "../View/GameView.h"
 
-#include <SDL.h>
-
 namespace Controller {
 
 class GameController {
@@ -24,8 +22,9 @@ public:
     void LaunchGameLoop();
     void closeGame();
 
-    void getGridDim(int &x, int &y) const;
-
+    void getGridDim(int &x, int &y, bool fromScreen) const;
+    [[nodiscard]] int getCellID(int x, int y) const;
+    [[nodiscard]] bool isCellNumbre(int x, int y) const;
     void getSelect(int &x, int &y) const;
 
     void mouseLeftDown(int mouseX, int mouseY);

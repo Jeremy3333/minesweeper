@@ -5,6 +5,7 @@
 #include "Grid.h"
 
 #include <iostream>
+#include <random>
 
 Grid::Grid(const Difficulty difficulty) : isInit_(false){
     switch (difficulty) {
@@ -62,6 +63,7 @@ Cell Grid::getCell(const int x, const int y) const{
     return cells_[x][y];
 }
 
+// NOLINTNEXTLINE
 bool Grid::revele(const int x, const int y) {
     if(x < 0 || y < 0 || x >= width_ || y >= height_)
         return false;
@@ -136,8 +138,8 @@ int Grid::bombAround(int x, int y) const{
     int n = 0;
     for(int i = -1; i <= 1; i++) {
         for(int j = -1; j <= 1; j++) {
-            int tx = i + x;
-            int ty = j + y;
+            const int tx = i + x;
+            const int ty = j + y;
             if(tx >= 0 && ty >= 0 && tx < width_ && ty < height_ && cells_[tx][ty].isBomb())
                 n++;
         }

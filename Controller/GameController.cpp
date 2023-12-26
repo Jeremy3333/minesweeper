@@ -3,21 +3,57 @@
 //
 
 #include "GameController.h"
+#include "../Utils/Constant.h"
+#include "../Utils/CaseID.h"
 
 #include <iostream>
-
-#include "../Utils/Constant.h"
 
 
 namespace Controller {
 
     GameController::GameController() : model(this), view(this), running(true), selX(-1), selY(-1) {}
 
-    void GameController::getGridDim(int& x, int& y) const
+    void GameController::getGridDim(int& x, int& y, const bool fromScreen) const
     {
         model.getGridDim(x, y);
-        GridToScreenGrid(x, y);
+        if(fromScreen)
+            GridToScreenGrid(x, y);
     }
+
+    int GameController::getCellID(const int x, const int y) const
+    {
+        const int index = model.getCellIndex(x, y);
+        const bool reveled = model.isReveled(x, y);
+        const bool marked = model.isMarked(x, y);
+        if(isCellNumbre(x, y))
+            return index - 1;
+
+
+
+        if(reveled) {
+            if(index == -2)
+                return ExplodedMine;
+            if(!marked) {
+                if(index == 0)
+                    return noMineAround;
+                return Mine;
+            }
+            if(index != -1)
+                return MarkedNoMine;
+            std::cerr << "Error Impossible case" << std::endl;
+            exit(1);
+        }
+        if(marked)
+            return Marked;
+        return Uncheck;
+    }
+
+    bool GameController::isCellNumbre(const int x, const int y) const
+    {
+        return (model.isReveled(x, y) && !model.isMarked(x, y) &&(model.getCellIndex(x, y) > 0));
+    }
+
+
 
     void GameController::getSelect(int& x, int& y) const
     {
@@ -40,7 +76,7 @@ namespace Controller {
             view.receiveInput();
 
             // Update the view based on the model
-            view.render(&model);
+            view.render();
         }
     }
 

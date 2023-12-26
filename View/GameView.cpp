@@ -48,7 +48,7 @@ namespace View {
 
     void GameView::receiveInput() {
         int gridX, gridY;
-        controller_->getGridDim(gridX, gridY);
+        controller_->getGridDim(gridX, gridY, true);
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT){
@@ -87,12 +87,14 @@ namespace View {
         }
     }
 
-    void GameView::render(Model::GameModel *model) const{
-        const int WINW = ((CASE_HEIGHT * (model->getGrid()->getWidth())) + 20) * ZOOM;
-        const int WINH = (((CASE_HEIGHT * (model->getGrid()->getWidth())) + 20) + 49) * ZOOM;
+    void GameView::render() const{
+        int gridW, gridH;
+        controller_->getGridDim(gridW, gridH, true);
+        const int WINW = gridW + (20 * ZOOM);
+        const int WINH = gridW + (20 + 49) * ZOOM;
         SDL_SetWindowSize(window_, WINW, WINH);
         drawBackground(WINW, WINH);
-        drawGrid(*model->getGrid());
+        drawGrid();
         SDL_RenderPresent(renderer_);
     }
 
@@ -103,12 +105,14 @@ namespace View {
         drawBump(8 * ZOOM, 8 * ZOOM, width - 16 * ZOOM, 41 * ZOOM, false);
     }
 
-    void GameView::drawGrid(const Grid& grid) const{
-        drawBump((GRID_X - 2) * ZOOM, (GRID_Y - 2) * ZOOM, ((grid.getWidth() * CASE_HEIGHT + 4) * ZOOM), ((grid.getHeight() * CASE_HEIGHT + 4) * ZOOM), false);
+    void GameView::drawGrid() const{
+        int gridW, gridH;
+        controller_->getGridDim(gridW, gridH, false);
+        drawBump((GRID_X - 2) * ZOOM, (GRID_Y - 2) * ZOOM, ((gridW * CASE_HEIGHT + 4) * ZOOM), ((gridH * CASE_HEIGHT + 4) * ZOOM), false);
         SDL_SetRenderDrawColor(renderer_,0, 0, 0, 255);
-        for(int i = 0; i < grid.getWidth(); i++) {
-            for(int j = 0; j < grid.getHeight(); j++) {
-                drawCase(i,j, grid.getCell(i, j));
+        for(int i = 0; i < gridW; i++) {
+            for(int j = 0; j < gridH; j++) {
+                drawCase(i,j);
             }
         }
         int x, y;
@@ -147,8 +151,8 @@ namespace View {
         SDL_RenderFillRect(renderer_, &rect);
     }
 
-    void GameView::drawCase(const int x, const int y, const Cell cell) const{
-        drawTexture((x * CASE_HEIGHT + GRID_X) * ZOOM, (y * CASE_HEIGHT + GRID_Y) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, cell.getCaseID() * 17, 51 + (static_cast<int>(cell.isCaseNumbre()) * 17), 16, 16, sprite_, false);
+    void GameView::drawCase(const int x, const int y) const{
+        drawTexture((x * CASE_HEIGHT + GRID_X) * ZOOM, (y * CASE_HEIGHT + GRID_Y) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, controller_->getCellID(x, y) * (CASE_HEIGHT + 1), SPRITE_CASE_Y + (static_cast<int>(controller_->isCellNumbre(x, y)) * (CASE_HEIGHT + 1)), CASE_HEIGHT, CASE_HEIGHT                                   , sprite_, false);
     }
 
     void GameView::drawSelect(const int x, const int y) const {

@@ -4,8 +4,6 @@
 
 #include "GameModel.h"
 
-#include <iostream>
-
 namespace Model {
     GameModel::GameModel(Controller::GameController* controller) : controller_(controller), lost(false), grid_(beginner){}
 
@@ -17,6 +15,21 @@ namespace Model {
     {
         x = grid_.getWidth();
         y = grid_.getHeight();
+    }
+
+    int GameModel::getCellIndex(const int x, const int y) const
+    {
+        return grid_.getCell(x, y).getIndex();
+    }
+
+    bool GameModel::isReveled(const int x, const int y) const
+    {
+        return grid_.getCell(x, y).isReveled();
+    }
+
+    bool GameModel::isMarked(const int x, const int y) const
+    {
+        return grid_.getCell(x, y).isMarked();
     }
 
 

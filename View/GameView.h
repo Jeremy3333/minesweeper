@@ -36,7 +36,7 @@ public:
      * \brief Render a fram of the game
      * \param model A pointer to the model that has to be display
      */
-    void render(Model::GameModel *model) const;
+    void render() const;
 private:
     SDL_Window* window_;
     SDL_Renderer* renderer_;
@@ -46,8 +46,8 @@ private:
     SDL_Texture *sprite_;
     void drawBackground(int width, int height) const;
     void drawBump(int x, int y, int w, int h, bool up) const;
-    void drawGrid(const Grid& grid) const;
-    void drawCase(int x, int y, Cell cell) const;
+    void drawGrid() const;
+    void drawCase(int x, int y) const;
     void drawSelect(int x, int y) const;
     void drawText(int x, int y,const char* text,const SDL_Color* textColor,bool centeredCoord) const;
     void drawSurface(int x, int y, SDL_Surface *surface,bool centeredCoord) const;

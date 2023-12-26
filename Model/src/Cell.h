@@ -22,8 +22,6 @@ public:
     bool revele();
     void reveleMine();
     void mark();
-    [[nodiscard]] bool isCaseNumbre() const;
-    [[nodiscard]] int getCaseID() const;
     [[nodiscard]] bool isReveled() const;
     [[nodiscard]] bool isMarked() const;
     [[nodiscard]] int getIndex() const;
