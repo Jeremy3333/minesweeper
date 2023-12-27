@@ -5,13 +5,14 @@
 #include "GameController.h"
 #include "../Utils/Constant.h"
 #include "../Utils/CaseID.h"
+#include "../Utils/ResetID.h"
 
 #include <iostream>
 
 
 namespace Controller {
 
-    GameController::GameController() : model(this), view(this), running(true), selX(-1), selY(-1) {}
+    GameController::GameController() : model(this), view(this), running(true), holdLeftClickGrid(false), gridW(0), gridH(0), selX(-1), selY(-1) {}
 
     void GameController::getGridDim(int& x, int& y, const bool fromScreen) const
     {
@@ -48,12 +49,31 @@ namespace Controller {
         return Uncheck;
     }
 
+    int GameController::getResetID() const
+    {
+        if(holdLeftClickGrid)
+            return CellSelect;
+        return Normal;
+    }
+
+
     bool GameController::isCellNumbre(const int x, const int y) const
     {
         return (model.isReveled(x, y) && !model.isMarked(x, y) &&(model.getCellIndex(x, y) > 0));
     }
 
+    bool GameController::isGridResize()
+    {
+        int tw, th;
+        model.getGridDim(tw, th);
 
+        if(tw == gridW && th == gridH)
+            return false;
+
+        gridW = tw;
+        gridH = th;
+        return true;
+    }
 
     void GameController::getSelect(int& x, int& y) const
     {
@@ -94,6 +114,7 @@ namespace Controller {
             int y = mouseY - gridY;
             ScreenGridToGrid(x, y);
             selectCell(x, y);
+            holdLeftClickGrid = true;
             return;
         }
         selX = -1;
@@ -108,7 +129,7 @@ namespace Controller {
         int gridW, gridH;
         model.getGridDim(gridW, gridH);
         GridToScreenGrid(gridW, gridH);
-        if(mouseX >= gridX && mouseY >= gridY && mouseX < gridX + gridW && mouseY < gridY + gridH)
+        if(mouseX >= gridX && mouseY >= gridY && mouseX < gridX + gridW && mouseY < gridY + gridH && holdLeftClickGrid)
         {
             int x = mouseX - gridX;
             int y = mouseY - gridY;
@@ -138,6 +159,7 @@ namespace Controller {
             ScreenGridToGrid(x, y);
             model.reveleCell(x, y);
         }
+        holdLeftClickGrid = false;
     }
 
     void GameController::mouseRightDown(const int mouseX, const int mouseY)

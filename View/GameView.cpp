@@ -98,9 +98,11 @@ namespace View {
         controller_->getGridDim(gridW, gridH, true);
         const int WINW = gridW + (20 * ZOOM);
         const int WINH = gridW + (20 + 49) * ZOOM;
-        SDL_SetWindowSize(window_, WINW, WINH);
+        if(controller_->isGridResize())
+            SDL_SetWindowSize(window_, WINW, WINH);
         drawBackground(WINW, WINH);
         drawGrid();
+        drawReset(WINW);
         SDL_RenderPresent(renderer_);
     }
 
@@ -108,7 +110,7 @@ namespace View {
         SDL_SetRenderDrawColor(renderer_,181, 181, 181, 255);
         SDL_RenderClear(renderer_);
         drawBump(0, 0, width, height, true);
-        drawBump(8 * ZOOM, 8 * ZOOM, width - 16 * ZOOM, 41 * ZOOM, false);
+        drawBump((HEADER_X - BORDER_LARGEUR) * ZOOM, (HEADER_Y - BORDER_LARGEUR) * ZOOM, width - 16 * ZOOM, (HEADER_H + BORDER_LARGEUR) * ZOOM, false);
     }
 
     void GameView::drawGrid() const{
@@ -165,6 +167,11 @@ namespace View {
         if(x == -1)
             return;
         drawTexture((x * CASE_HEIGHT + GRID_X) * ZOOM, (y * CASE_HEIGHT + GRID_Y) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, 17, 51, 16, 16, sprite_, false);
+    }
+
+    void GameView::drawReset(const int WINW) const
+    {
+        drawTexture(WINW / 2, (HEADER_Y + (HEADER_H / 2)) * ZOOM, RESET_HEIGHT * ZOOM, RESET_HEIGHT * ZOOM, controller_->getResetID() * (RESET_HEIGHT + 1), SPRITE_RESET_Y, RESET_HEIGHT, RESET_HEIGHT, sprite_, true);
     }
 
 

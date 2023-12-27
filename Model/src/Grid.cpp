@@ -122,19 +122,11 @@ void Grid::init(const int x, const int y){
 
     int tx, ty;
 
-    do
-    {
-        for(int i = 0; i < width_; i++)
-        {
-            for(int j = 0; j < height_; j++) {
-                cells_[i][j].setIndex(0);
-            }
-        }
         for(int i = 0; i < numMine_; i++) {
             do {
                 tx = static_cast<int>(gen() % width_);
                 ty = static_cast<int>(gen() % height_);
-            }while((tx == x && ty == y) || cells_[tx][ty].isBomb());
+            }while(((tx >= x - 1 && tx <= x + 1) && (ty >= y - 1 && ty <= y + 1)) || cells_[tx][ty].isBomb());
             cells_[tx][ty].setIndex(-1);
         }
 
@@ -144,18 +136,15 @@ void Grid::init(const int x, const int y){
                     cells_[i][j].setIndex(bombAround(i, j));
             }
         }
-    }while(cells_[x][y].getIndex() != 0);
 
     isInit_ = true;
 }
 
-int Grid::bombAround(int x, int y) const{
+int Grid::bombAround(const int x, const int y) const{
     int n = 0;
     for(int i = -1; i <= 1; i++) {
         for(int j = -1; j <= 1; j++) {
-            const int tx = i + x;
-            const int ty = j + y;
-            if(tx >= 0 && ty >= 0 && tx < width_ && ty < height_ && cells_[tx][ty].isBomb())
+            if(i + x >= 0 && j + y >= 0 && i + x < width_ && j + y < height_ && cells_[i + x][j + y].isBomb())
                 n++;
         }
     }

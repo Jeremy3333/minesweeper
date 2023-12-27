@@ -24,7 +24,9 @@ public:
 
     void getGridDim(int &x, int &y, bool fromScreen) const;
     [[nodiscard]] int getCellID(int x, int y) const;
+    [[nodiscard]] int getResetID() const;
     [[nodiscard]] bool isCellNumbre(int x, int y) const;
+    [[nodiscard]] bool isGridResize();
     void getSelect(int &x, int &y) const;
 
     void mouseLeftDown(int mouseX, int mouseY);
@@ -39,6 +41,8 @@ private:
     Model::GameModel model;
     View::GameView view;
     bool running;
+    bool holdLeftClickGrid;
+    int gridW, gridH;
     int selX, selY;
     void selectCell(int x, int y);
 };
