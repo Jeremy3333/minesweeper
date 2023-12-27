@@ -116,8 +116,7 @@ void Grid::markCell(const int x, const int y) const
 
 
 
-void Grid::init(const int x, const int y)
-{
+void Grid::init(const int x, const int y){
     std::random_device rd;
     std::mt19937 gen(rd());
 
