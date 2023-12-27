@@ -122,20 +122,29 @@ void Grid::init(const int x, const int y){
 
     int tx, ty;
 
-    for(int i = 0; i < numMine_; i++) {
-        do {
-            tx = static_cast<int>(gen() % width_);
-            ty = static_cast<int>(gen() % height_);
-        }while((tx == x && ty == y) || cells_[tx][ty].isBomb());
-        cells_[tx][ty].setIndex(-1);
-    }
-
-    for(int i = 0; i < width_; i++) {
-        for(int j = 0; j < height_; j++) {
-            if(!cells_[i][j].isBomb())
-                cells_[i][j].setIndex(bombAround(i, j));
+    do
+    {
+        for(int i = 0; i < width_; i++)
+        {
+            for(int j = 0; j < height_; j++) {
+                cells_[i][j].setIndex(0);
+            }
         }
-    }
+        for(int i = 0; i < numMine_; i++) {
+            do {
+                tx = static_cast<int>(gen() % width_);
+                ty = static_cast<int>(gen() % height_);
+            }while((tx == x && ty == y) || cells_[tx][ty].isBomb());
+            cells_[tx][ty].setIndex(-1);
+        }
+
+        for(int i = 0; i < width_; i++) {
+            for(int j = 0; j < height_; j++) {
+                if(!cells_[i][j].isBomb())
+                    cells_[i][j].setIndex(bombAround(i, j));
+            }
+        }
+    }while(cells_[x][y].getIndex() != 0);
 
     isInit_ = true;
 }
