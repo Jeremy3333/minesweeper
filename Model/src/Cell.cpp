@@ -35,6 +35,12 @@ void Cell::mark() {
     marked_ = true;
 }
 
+void Cell::changeMark()
+{
+    marked_ = !marked_;
+}
+
+
 bool Cell::isReveled() const {
     return reveled_;
 }

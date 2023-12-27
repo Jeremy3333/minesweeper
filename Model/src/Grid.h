@@ -37,6 +37,7 @@ public:
     [[nodiscard]] bool isFinished() const;
 
     void markAllBomb() const;
+    void markCell(int x, int y) const;
 private:
     int numMine_;
     int mineLeft_;

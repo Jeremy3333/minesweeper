@@ -22,6 +22,7 @@ public:
     bool revele();
     void reveleMine();
     void mark();
+    void changeMark();
     [[nodiscard]] bool isReveled() const;
     [[nodiscard]] bool isMarked() const;
     [[nodiscard]] int getIndex() const;

@@ -30,8 +30,8 @@ public:
     [[nodiscard]] bool isReveled(int x, int y) const;
     [[nodiscard]] bool isMarked(int x, int y) const;
 
-
     void reveleCell(int x, int y);
+    void markCell(int x, int y) const;
 
 private:
     Controller::GameController *controller_;

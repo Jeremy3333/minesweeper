@@ -70,6 +70,12 @@ namespace View {
                     controller_->mouseLeftDown(mouseX, mouseY);
                     mouseLeft = true;
                 }
+                else if (event.button.button == SDL_BUTTON_RIGHT)
+                {
+                    const int mouseX = event.button.x;
+                    const int mouseY = event.button.y;
+                    controller_->mouseRightDown(mouseX, mouseY);
+                }
             }
             else if (event.type == SDL_MOUSEBUTTONUP) {
                 if (event.button.button == SDL_BUTTON_LEFT) {

@@ -43,5 +43,14 @@ namespace Model {
         }
     }
 
+    void GameModel::markCell(const int x, const int y) const
+    {
+        if(!grid_.getCell(x, y).isReveled())
+        {
+            grid_.markCell(x, y);
+        }
+    }
+
+
 
 } // Model

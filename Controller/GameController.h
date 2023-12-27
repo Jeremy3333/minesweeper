@@ -31,6 +31,8 @@ public:
     void mouseLeftHoldDown(int mouseX, int mouseY);
     void mouseLeftUp(int mouseX, int mouseY);
 
+    void mouseRightDown(int mouseX, int mouseY);
+
     static void ScreenGridToGrid(int &x, int &y);
     static void GridToScreenGrid(int &x, int &y);
 private:

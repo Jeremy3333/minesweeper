@@ -109,6 +109,12 @@ void Grid::markAllBomb() const{
     }
 }
 
+void Grid::markCell(const int x, const int y) const
+{
+    cells_[x][y].changeMark();
+}
+
+
 
 void Grid::init(const int x, const int y){
     std::random_device rd;

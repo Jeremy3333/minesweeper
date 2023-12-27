@@ -140,6 +140,23 @@ namespace Controller {
         }
     }
 
+    void GameController::mouseRightDown(const int mouseX, const int mouseY)
+    {
+        // if it's on the grid
+        constexpr int gridX = GRID_X * ZOOM;
+        constexpr int gridY = GRID_Y * ZOOM;
+        int gridW, gridH;
+        model.getGridDim(gridW, gridH);
+        GridToScreenGrid(gridW, gridH);
+        if(mouseX >= gridX && mouseY >= gridY && mouseX < gridX + gridW && mouseY < gridY + gridH)
+        {
+            int x = mouseX - gridX;
+            int y = mouseY - gridY;
+            ScreenGridToGrid(x, y);
+            model.markCell(x, y);
+        }
+    }
+
     void GameController::selectCell(int x, int y)
     {
         if(model.getGrid()->getCell(x, y).isMarked() || model.getGrid()->getCell(x, y).isReveled())
