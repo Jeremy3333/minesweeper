@@ -32,6 +32,7 @@ public:
 
     void reveleCell(int x, int y);
     void markCell(int x, int y) const;
+    void resetGrid();
 
 private:
     Controller::GameController *controller_;

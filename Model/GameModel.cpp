@@ -51,6 +51,12 @@ namespace Model {
         }
     }
 
+    void GameModel::resetGrid()
+    {
+        grid_.reset();
+    }
+
+
 
 
 } // Model

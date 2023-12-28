@@ -9,7 +9,7 @@
 #include <iostream>
 
 namespace View {
-    GameView::GameView(Controller::GameController *controller) : controller_(controller), mouseLeft(false){
+    GameView::GameView(Controller::GameController *controller) :WINH(0), WINW(0), controller_(controller), mouseLeft(false){
         window_ = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
         if(!window_) {
             std::cerr << "SDL window creation error: " << SDL_GetError() << std::endl;
@@ -93,18 +93,27 @@ namespace View {
         }
     }
 
-    void GameView::render() const{
+    void GameView::render() {
         int gridW, gridH;
         controller_->getGridDim(gridW, gridH, true);
-        const int WINW = gridW + (20 * ZOOM);
-        const int WINH = gridW + (20 + 49) * ZOOM;
         if(controller_->isGridResize())
+        {
+            WINW = gridW + (20 * ZOOM);
+            WINH = gridW + (20 + 49) * ZOOM;
             SDL_SetWindowSize(window_, WINW, WINH);
+        }
         drawBackground(WINW, WINH);
         drawGrid();
-        drawReset(WINW);
+        drawReset();
         SDL_RenderPresent(renderer_);
     }
+
+    void GameView::getWindowDim(int& w, int& h) const
+    {
+        w = WINW;
+        h = WINH;
+    }
+
 
     void GameView::drawBackground(const int width, const int height) const{
         SDL_SetRenderDrawColor(renderer_,181, 181, 181, 255);
@@ -169,7 +178,7 @@ namespace View {
         drawTexture((x * CASE_HEIGHT + GRID_X) * ZOOM, (y * CASE_HEIGHT + GRID_Y) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, 17, 51, 16, 16, sprite_, false);
     }
 
-    void GameView::drawReset(const int WINW) const
+    void GameView::drawReset() const
     {
         drawTexture(WINW / 2, (HEADER_Y + (HEADER_H / 2)) * ZOOM, RESET_HEIGHT * ZOOM, RESET_HEIGHT * ZOOM, controller_->getResetID() * (RESET_HEIGHT + 1), SPRITE_RESET_Y, RESET_HEIGHT, RESET_HEIGHT, sprite_, true);
     }

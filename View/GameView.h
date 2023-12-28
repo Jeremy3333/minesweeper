@@ -36,10 +36,13 @@ public:
      * \brief Render a fram of the game
      * \param model A pointer to the model that has to be display
      */
-    void render() const;
+    void render();
+
+    void getWindowDim(int &w, int &h) const;
 private:
     SDL_Window* window_;
     SDL_Renderer* renderer_;
+    int WINW, WINH;
     Controller::GameController *controller_;
     bool mouseLeft;
     TTF_Font* font_;
@@ -49,7 +52,7 @@ private:
     void drawGrid() const;
     void drawCase(int x, int y) const;
     void drawSelect(int x, int y) const;
-    void drawReset(int WINW) const;
+    void drawReset() const;
     void drawText(int x, int y,const char* text,const SDL_Color* textColor,bool centeredCoord) const;
     void drawSurface(int x, int y, SDL_Surface *surface,bool centeredCoord) const;
     void drawTexture(int pos_x, int pos_y, int w, int h, int ori_x, int ori_y, int ori_w, int ori_h, SDL_Texture *texture,bool centeredCoord) const;

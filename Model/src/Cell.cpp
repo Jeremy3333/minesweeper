@@ -40,6 +40,13 @@ void Cell::changeMark()
     marked_ = !marked_;
 }
 
+void Cell::reset()
+{
+    reveled_ = false;
+    marked_ = false;
+    index_ = 0;
+}
+
 
 bool Cell::isReveled() const {
     return reveled_;

@@ -100,6 +100,20 @@ bool Grid::isFinished() const {
     return true;
 }
 
+void Grid::reset()
+{
+    for(int i = 0; i < width_; i++)
+    {
+        for(int j = 0; j < height_; j++)
+        {
+            cells_[i][j].reset();
+        }
+    }
+    mineLeft_ = numMine_;
+    isInit_ = false;
+}
+
+
 void Grid::markAllBomb() const{
     for(int i = 0; i < width_; i++) {
         for(int j = 0; j < height_; j++) {

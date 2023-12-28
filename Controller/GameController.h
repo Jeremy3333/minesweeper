@@ -41,7 +41,7 @@ private:
     Model::GameModel model;
     View::GameView view;
     bool running;
-    bool holdLeftClickGrid;
+    bool holdLeftClickGrid, holdLeftClickReset;
     int gridW, gridH;
     int selX, selY;
     void selectCell(int x, int y);

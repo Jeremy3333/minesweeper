@@ -27,14 +27,13 @@ public:
      * \return How many Cells there is in height
      */
     [[nodiscard]] int getHeight() const;
-
     [[nodiscard]] Cell getCell(int x, int y) const;
+    [[nodiscard]] bool isFinished() const;
 
     bool revele(int x, int y);
-
     void reveleMine() const;
 
-    [[nodiscard]] bool isFinished() const;
+    void reset();
 
     void markAllBomb() const;
     void markCell(int x, int y) const;

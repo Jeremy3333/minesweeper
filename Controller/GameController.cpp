@@ -12,7 +12,7 @@
 
 namespace Controller {
 
-    GameController::GameController() : model(this), view(this), running(true), holdLeftClickGrid(false), gridW(0), gridH(0), selX(-1), selY(-1) {}
+    GameController::GameController() : model(this), view(this), running(true), holdLeftClickGrid(false), holdLeftClickReset(false), gridW(0), gridH(0), selX(-1), selY(-1) {}
 
     void GameController::getGridDim(int& x, int& y, const bool fromScreen) const
     {
@@ -53,6 +53,8 @@ namespace Controller {
     {
         if(holdLeftClickGrid)
             return CellSelect;
+        if(holdLeftClickReset)
+            return NormalSelect;
         return Normal;
     }
 
@@ -102,12 +104,14 @@ namespace Controller {
 
     void GameController::mouseLeftDown(const int mouseX, const int mouseY)
     {
-        // if it's on the grid
+        int WINW, WINH;
+        view.getWindowDim(WINW, WINH);
         constexpr int gridX = GRID_X * ZOOM;
         constexpr int gridY = GRID_Y * ZOOM;
         int gridW, gridH;
         model.getGridDim(gridW, gridH);
         GridToScreenGrid(gridW, gridH);
+        // if it's on the grid
         if(mouseX >= gridX && mouseY >= gridY && mouseX < gridX + gridW && mouseY < gridY + gridH)
         {
             int x = mouseX - gridX;
@@ -116,6 +120,15 @@ namespace Controller {
             selectCell(x, y);
             holdLeftClickGrid = true;
             return;
+        }
+        // if it's on the reset button
+        if(
+            mouseX >= ((WINW / 2) - (RESET_HEIGHT / 2) * ZOOM) &&
+            mouseX < ((WINW / 2) + (RESET_HEIGHT / 2) * ZOOM) &&
+            mouseY >= (HEADER_Y + (HEADER_H / 2) - (RESET_HEIGHT / 2)) * ZOOM &&
+            mouseY < (HEADER_Y + (HEADER_H / 2) + (RESET_HEIGHT / 2)) * ZOOM)
+        {
+            holdLeftClickReset = true;
         }
         selX = -1;
         selY = -1;
@@ -145,13 +158,14 @@ namespace Controller {
     {
         selX = -1;
         selY = -1;
-
-        // if it's on the grid
+        int WINW, WINH;
+        view.getWindowDim(WINW, WINH);
         constexpr int gridX = GRID_X * ZOOM;
         constexpr int gridY = GRID_Y * ZOOM;
         int gridW, gridH;
         model.getGridDim(gridW, gridH);
         GridToScreenGrid(gridW, gridH);
+        // if it's on the grid
         if(mouseX >= gridX && mouseY >= gridY && mouseX < gridX + gridW && mouseY < gridY + gridH)
         {
             int x = mouseX - gridX;
@@ -159,7 +173,18 @@ namespace Controller {
             ScreenGridToGrid(x, y);
             model.reveleCell(x, y);
         }
+        // if it's on the reset button
+        else if(
+            mouseX >= ((WINW / 2) - (RESET_HEIGHT / 2) * ZOOM) &&
+            mouseX < ((WINW / 2) + (RESET_HEIGHT / 2) * ZOOM) &&
+            mouseY >= (HEADER_Y + (HEADER_H / 2) - (RESET_HEIGHT / 2)) * ZOOM &&
+            mouseY < (HEADER_Y + (HEADER_H / 2) + (RESET_HEIGHT / 2)) * ZOOM &&
+            holdLeftClickReset)
+        {
+            model.resetGrid();
+        }
         holdLeftClickGrid = false;
+        holdLeftClickReset = false;
     }
 
     void GameController::mouseRightDown(const int mouseX, const int mouseY)

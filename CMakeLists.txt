@@ -39,6 +39,7 @@ add_executable(minesweeper main.cpp
         Controller/GameController.cpp
         Model/src/Grid.cpp
         Utils/ResetID.h
+        View/GameView.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY})
