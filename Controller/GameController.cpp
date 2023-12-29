@@ -51,6 +51,10 @@ namespace Controller {
 
     int GameController::getResetID() const
     {
+        if(model.isLost())
+            return Lose;
+        if(model.isWin())
+            return Win;
         if(holdLeftClickGrid)
             return CellSelect;
         if(holdLeftClickReset)
@@ -206,7 +210,7 @@ namespace Controller {
 
     void GameController::selectCell(int x, int y)
     {
-        if(model.getGrid()->getCell(x, y).isMarked() || model.getGrid()->getCell(x, y).isReveled())
+        if(model.getGrid()->getCell(x, y).isMarked() || model.getGrid()->getCell(x, y).isReveled() || model.isLost() || model.isWin())
         {
             selX = -1;
             selY = -1;

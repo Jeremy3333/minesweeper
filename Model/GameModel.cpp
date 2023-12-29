@@ -5,7 +5,7 @@
 #include "GameModel.h"
 
 namespace Model {
-    GameModel::GameModel(Controller::GameController* controller) : controller_(controller), lost(false), grid_(beginner){}
+    GameModel::GameModel(Controller::GameController* controller) : controller_(controller), lost_(false), win_(false), grid_(beginner){}
 
     Grid *GameModel::getGrid() {
         return &grid_;
@@ -32,19 +32,33 @@ namespace Model {
         return grid_.getCell(x, y).isMarked();
     }
 
+    bool GameModel::isLost() const
+    {
+        return lost_;
+    }
+
+    bool GameModel::isWin() const
+    {
+        return win_;
+    }
 
     void GameModel::reveleCell(const int x, const int y) {
+        if(lost_||win_)
+            return;
         if(grid_.revele(x, y)) {
-            lost = true;
+            lost_ = true;
             grid_.reveleMine();
         }
-        if(grid_.isFinished()) {
+        if(grid_.isWin()) {
+            win_ = true;
             grid_.markAllBomb();
         }
     }
 
     void GameModel::markCell(const int x, const int y) const
     {
+        if(lost_||win_)
+            return;
         if(!grid_.getCell(x, y).isReveled())
         {
             grid_.markCell(x, y);
@@ -53,6 +67,8 @@ namespace Model {
 
     void GameModel::resetGrid()
     {
+        lost_ = false;
+        win_ = false;
         grid_.reset();
     }
 

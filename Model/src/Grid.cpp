@@ -89,7 +89,7 @@ void Grid::reveleMine() const {
     }
 }
 
-bool Grid::isFinished() const {
+bool Grid::isWin() const {
     for(int i = 0; i < width_; i++) {
         for(int j = 0; j < height_; j++) {
             if(!cells_[i][j].isBomb() && !cells_[i][j].isReveled()) {

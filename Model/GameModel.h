@@ -29,6 +29,8 @@ public:
     [[nodiscard]] int getCellIndex(int x, int y) const;
     [[nodiscard]] bool isReveled(int x, int y) const;
     [[nodiscard]] bool isMarked(int x, int y) const;
+    [[nodiscard]] bool isLost() const;
+    [[nodiscard]] bool isWin() const;
 
     void reveleCell(int x, int y);
     void markCell(int x, int y) const;
@@ -36,7 +38,7 @@ public:
 
 private:
     Controller::GameController *controller_;
-    bool lost;
+    bool lost_, win_;
     Grid grid_;
 };
 

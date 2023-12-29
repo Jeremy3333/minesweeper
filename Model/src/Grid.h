@@ -28,7 +28,7 @@ public:
      */
     [[nodiscard]] int getHeight() const;
     [[nodiscard]] Cell getCell(int x, int y) const;
-    [[nodiscard]] bool isFinished() const;
+    [[nodiscard]] bool isWin() const;
 
     bool revele(int x, int y);
     void reveleMine() const;
