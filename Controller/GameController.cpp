@@ -62,6 +62,10 @@ namespace Controller {
         return Normal;
     }
 
+    int GameController::getMineLeft() const
+    {
+        return model.getMineLeft();
+    }
 
     bool GameController::isCellNumbre(const int x, const int y) const
     {

@@ -103,8 +103,8 @@ namespace View {
             SDL_SetWindowSize(window_, WINW, WINH);
         }
         drawBackground(WINW, WINH);
+        drawHeader(WINW);
         drawGrid();
-        drawReset();
         SDL_RenderPresent(renderer_);
     }
 
@@ -119,7 +119,6 @@ namespace View {
         SDL_SetRenderDrawColor(renderer_,181, 181, 181, 255);
         SDL_RenderClear(renderer_);
         drawBump(0, 0, width, height, true);
-        drawBump((HEADER_X - BORDER_LARGEUR) * ZOOM, (HEADER_Y - BORDER_LARGEUR) * ZOOM, width - 16 * ZOOM, (HEADER_H + BORDER_LARGEUR) * ZOOM, false);
     }
 
     void GameView::drawGrid() const{
@@ -178,11 +177,32 @@ namespace View {
         drawTexture((x * CASE_HEIGHT + GRID_X) * ZOOM, (y * CASE_HEIGHT + GRID_Y) * ZOOM, CASE_HEIGHT * ZOOM, CASE_HEIGHT * ZOOM, 17, 51, 16, 16, sprite_, false);
     }
 
+    void GameView::drawHeader(const int width) const
+    {
+        drawBump((HEADER_X - BORDER_LARGEUR) * ZOOM, (HEADER_Y - BORDER_LARGEUR) * ZOOM, width - 16 * ZOOM, (HEADER_H + BORDER_LARGEUR) * ZOOM, false);
+        drawNumbre(((HEADER_X) + 7) * ZOOM, ((HEADER_Y - 1 + (HEADER_H - NUMBRE_H) / 2)) * ZOOM, controller_->getMineLeft());
+        drawReset();
+    }
+
+
     void GameView::drawReset() const
     {
         drawTexture(WINW / 2, (HEADER_Y + (HEADER_H / 2)) * ZOOM, RESET_HEIGHT * ZOOM, RESET_HEIGHT * ZOOM, controller_->getResetID() * (RESET_HEIGHT + 1), SPRITE_RESET_Y, RESET_HEIGHT, RESET_HEIGHT, sprite_, true);
     }
 
+    // NOLINTNEXTLINE
+    void GameView::drawNumbre(const int x, const int y, int n) const
+    {
+        if(n > 999)
+            drawNumbre(x, y, 999);
+        for(int i = 2; i >= 0; i--)
+        {
+            const int c = n % 10;
+            n /= 10;
+            drawTexture(x + (i * NUMBRE_W * ZOOM), y, NUMBRE_W * ZOOM, NUMBRE_H * ZOOM, (NUMBRE_W + 1) * c, NUMBRE_Y, NUMBRE_W, NUMBRE_H, sprite_, false);
+        }
+        drawBump(x - (BORDER_LARGEUR * ZOOM), y - (BORDER_LARGEUR * ZOOM), (3 * NUMBRE_W + 2 * BORDER_LARGEUR) * ZOOM, (NUMBRE_H + 2 * BORDER_LARGEUR)* ZOOM, false);
+    }
 
     void GameView::drawText(const int x, const int y, const char* text, const SDL_Color* textColor, const bool centeredCoord) const {
         SDL_Surface* textSurface = TTF_RenderText_Solid(font_, text, *textColor);

@@ -22,7 +22,7 @@ public:
     bool revele();
     void reveleMine();
     void mark();
-    void changeMark();
+    bool changeMark();
     void reset();
     [[nodiscard]] bool isReveled() const;
     [[nodiscard]] bool isMarked() const;

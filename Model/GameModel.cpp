@@ -22,6 +22,11 @@ namespace Model {
         return grid_.getCell(x, y).getIndex();
     }
 
+    int GameModel::getMineLeft() const
+    {
+        return grid_.getMineLeft();
+    }
+
     bool GameModel::isReveled(const int x, const int y) const
     {
         return grid_.getCell(x, y).isReveled();
@@ -55,7 +60,7 @@ namespace Model {
         }
     }
 
-    void GameModel::markCell(const int x, const int y) const
+    void GameModel::markCell(const int x, const int y)
     {
         if(lost_||win_)
             return;

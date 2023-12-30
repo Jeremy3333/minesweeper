@@ -35,9 +35,10 @@ void Cell::mark() {
     marked_ = true;
 }
 
-void Cell::changeMark()
+bool Cell::changeMark()
 {
     marked_ = !marked_;
+    return marked_;
 }
 
 void Cell::reset()

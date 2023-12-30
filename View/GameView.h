@@ -52,7 +52,9 @@ private:
     void drawGrid() const;
     void drawCase(int x, int y) const;
     void drawSelect(int x, int y) const;
+    void drawHeader(int width) const;
     void drawReset() const;
+    void drawNumbre(int x, int y, int n) const;
     void drawText(int x, int y,const char* text,const SDL_Color* textColor,bool centeredCoord) const;
     void drawSurface(int x, int y, SDL_Surface *surface,bool centeredCoord) const;
     void drawTexture(int pos_x, int pos_y, int w, int h, int ori_x, int ori_y, int ori_w, int ori_h, SDL_Texture *texture,bool centeredCoord) const;

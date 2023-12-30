@@ -29,14 +29,15 @@ public:
     [[nodiscard]] int getHeight() const;
     [[nodiscard]] Cell getCell(int x, int y) const;
     [[nodiscard]] bool isWin() const;
+    [[nodiscard]] int getMineLeft() const;
 
     bool revele(int x, int y);
     void reveleMine() const;
 
     void reset();
 
-    void markAllBomb() const;
-    void markCell(int x, int y) const;
+    void markAllBomb();
+    void markCell(int x, int y);
 private:
     int numMine_;
     int mineLeft_;

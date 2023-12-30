@@ -16,5 +16,8 @@
 #define HEADER_X 10
 #define HEADER_Y 10
 #define HEADER_H 39
+#define NUMBRE_Y 0
+#define NUMBRE_W 13
+#define NUMBRE_H 23
 
 #endif //CONSTANT_H

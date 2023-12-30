@@ -25,6 +25,7 @@ public:
     void getGridDim(int &x, int &y, bool fromScreen) const;
     [[nodiscard]] int getCellID(int x, int y) const;
     [[nodiscard]] int getResetID() const;
+    [[nodiscard]] int getMineLeft() const;
     [[nodiscard]] bool isCellNumbre(int x, int y) const;
     [[nodiscard]] bool isGridResize();
     void getSelect(int &x, int &y) const;

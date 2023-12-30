@@ -100,6 +100,12 @@ bool Grid::isWin() const {
     return true;
 }
 
+int Grid::getMineLeft() const
+{
+    return mineLeft_;
+}
+
+
 void Grid::reset()
 {
     for(int i = 0; i < width_; i++)
@@ -114,18 +120,22 @@ void Grid::reset()
 }
 
 
-void Grid::markAllBomb() const{
+void Grid::markAllBomb() {
     for(int i = 0; i < width_; i++) {
         for(int j = 0; j < height_; j++) {
             if(cells_[i][j].isBomb())
                 cells_[i][j].mark();
         }
     }
+    mineLeft_ = 0;
 }
 
-void Grid::markCell(const int x, const int y) const
+void Grid::markCell(const int x, const int y)
 {
-    cells_[x][y].changeMark();
+    if(cells_[x][y].changeMark())
+        mineLeft_--;
+    else
+        mineLeft_++;
 }
 
 
